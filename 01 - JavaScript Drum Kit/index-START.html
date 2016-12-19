@@ -9,7 +9,7 @@
 
 
   <div class="keys">
-    <div data-key="65" class="key">
+    <div data-key="65" class="key" onkeypress="keyPress(event)">
       <kbd>A</kbd>
       <span class="sound">clap</span>
     </div>
@@ -58,6 +58,19 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  document.onkeydown = function(event) {
+    var key = event.keyCode;
+    var elements = document.getElementsByClassName('key');
+
+    for(var i = 0; i < elements.length; i++) {
+
+      if(elements[i].dataset.key == key) {
+        console.log(key);
+      }
+    }
+
+
+  }
 
 </script>
 
