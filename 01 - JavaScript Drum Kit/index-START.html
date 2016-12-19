@@ -58,21 +58,42 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  /*************************************
+  When user presses down on one of the keys:
+    1. function will loop through all keys
+  *************************************/
   document.onkeydown = function(event) {
     var elements = document.getElementsByClassName('key');
     var key = event.keyCode;
 
     for(var i = 0; i < elements.length; i++) {
+      /*************************************
+      2. if key pressed equals one of the given keys then add 'playing' class
+      *************************************/
       if(elements[i].dataset.key == key) {
         var currentElement = elements[i];
         currentElement.classList.add('playing');
-
+        /*************************************
+        3. find matching sound key and play
+        *************************************/
+        sound(key);
+        /*************************************
+        4. then after .1 of a second, remove the 'playing' class
+        *************************************/
         (function(element) {
           setTimeout(function() {
             element.classList.remove('playing');
           }, 100);
         })(currentElement);
+      }
+    }
+  }
 
+  function sound(key) {
+    var elements = document.querySelectorAll('audio');
+    for(var i = 0; i < elements.length; i++) {
+      if(elements[i].dataset.key == key) {
+        elements[i].play();
       }
     }
   }
