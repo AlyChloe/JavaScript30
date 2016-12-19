@@ -59,42 +59,39 @@
 
 <script>
   /*************************************
-  When user presses down on one of the keys:
-    1. function will loop through all keys
+  1. When user presses down on one of the keys, function will run
   *************************************/
   document.onkeydown = function(event) {
-    var elements = document.getElementsByClassName('key');
     var key = event.keyCode;
-
-    for(var i = 0; i < elements.length; i++) {
+    var element = document.querySelector(`div[data-key="${key}"]`);
+    /*************************************
+    2. If key pressed equals one of the given keys then add 'playing' class
+    *************************************/
+    if(element) {
+      element.classList.add('playing');
       /*************************************
-      2. if key pressed equals one of the given keys then add 'playing' class
+      3. Find matching sound key and play
       *************************************/
-      if(elements[i].dataset.key == key) {
-        var currentElement = elements[i];
-        currentElement.classList.add('playing');
-        /*************************************
-        3. find matching sound key and play
-        *************************************/
-        sound(key);
-        /*************************************
-        4. then after .1 of a second, remove the 'playing' class
-        *************************************/
-        (function(element) {
-          setTimeout(function() {
-            element.classList.remove('playing');
-          }, 100);
-        })(currentElement);
-      }
+      sound(key);
+      /*************************************
+      4. Then remove the 'playing' class
+      *************************************/
+      var keys = document.querySelectorAll('.key');
+      keys.forEach(key => key.addEventListener('transitionend', removeClass));
     }
   }
 
+  function removeClass(event) {
+    if(event.propertyName !== 'transform') return; // skip if not a transform
+    this.classList.remove('playing');
+  }
+
   function sound(key) {
-    var elements = document.querySelectorAll('audio');
-    for(var i = 0; i < elements.length; i++) {
-      if(elements[i].dataset.key == key) {
-        elements[i].play();
-      }
+    var element = document.querySelector(`audio[data-key="${key}"]`);
+
+    if(element) {
+      element.currentTime = 0; // rewinds to the start if user continously presses key
+      element.play();
     }
   }
 
